@@ -1,4 +1,4 @@
-using FileUpload.Services;
+using FileUpload.Services.FileServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +25,7 @@ namespace FileUpload
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
             services.AddScoped<IFileUploadService, FileUploadService>();
         }
 

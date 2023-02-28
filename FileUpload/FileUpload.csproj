@@ -8,4 +8,8 @@
     <Folder Include="wwwroot\uploads\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileUpload.Services\FileUpload.Services.csproj" />
+  </ItemGroup>
+
 </Project>

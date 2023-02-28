@@ -1,4 +1,5 @@
-﻿using FileUpload.Services;
+﻿using FileUpload.Services.FileServices;
+using FileUpload.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,15 +14,16 @@ namespace FileUpload.Pages
     public class IndexModel : PageModel
     {
         private readonly IFileUploadService _fileUploadService;
-
+        private readonly IHttpContextAccessor _accessor;
         public string filePath;
 
         [BindProperty]
         public IFormFile File { get; set; }
 
-        public IndexModel(IFileUploadService fileUploadService)
+        public IndexModel(IFileUploadService fileUploadService, IHttpContextAccessor accessor)
         {
             _fileUploadService = fileUploadService;
+            _accessor = accessor;
         }
 
         public void OnGet()
@@ -33,7 +35,9 @@ namespace FileUpload.Pages
         {
             if (File is null) return;
 
-            filePath = await _fileUploadService.UploadFileAsync(File);
+           var imagePath = await _fileUploadService.UploadFileAsync(File);
+
+            filePath = $"{BaseUrlHelper.GetAppBasePathUrl((HttpContextAccessor)_accessor)}/uploads/images/{File.FileName}";
         }
     }
 }
