@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FileUpload.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -11,11 +12,16 @@ namespace FileUpload.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly IFileUploadService _fileUploadService;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public string filePath;
+
+        [BindProperty]
+        public IFormFile File { get; set; }
+
+        public IndexModel(IFileUploadService fileUploadService)
         {
-            _logger = logger;
+            _fileUploadService = fileUploadService;
         }
 
         public void OnGet()
@@ -23,9 +29,11 @@ namespace FileUpload.Pages
 
         }
 
-        public void OnPost(IFormFile file)
+        public async Task OnPost()
         {
+            if (File is null) return;
 
+            filePath = await _fileUploadService.UploadFileAsync(File);
         }
     }
 }
